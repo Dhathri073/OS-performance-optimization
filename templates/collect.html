@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Collect Data - OS Performance Optimization{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        <div class="card">
+            <div class="card-header">
+                <h3>Data Collection</h3>
+            </div>
+            <div class="card-body">
+                <p>Collect real-time performance metrics from your system. The data will be stored in the database for analysis.</p>
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="duration" class="form-label">Collection Duration (seconds)</label>
+                        <input type="number" class="form-control" id="duration" name="duration" value="30" min="5" max="300">
+                        <div class="form-text">Recommended: 30-60 seconds for good data collection</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Start Collection</button>
+                </form>
+
+                <div class="alert alert-info mt-3">
+                    <strong>Note:</strong> Data collection will run for the specified duration on the server. Please wait for the page to redirect to the dashboard.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

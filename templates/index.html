@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Home - OS Performance Optimization{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">OS Performance Optimization</h1>
+            <p class="lead">Machine Learning-Driven OS Performance Optimization Using DBMS and Algorithmic Techniques</p>
+            <hr class="my-4">
+            <p>Monitor, analyze, and optimize your system's performance using advanced machine learning algorithms.</p>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('collect') }}" role="button">Start Monitoring</a>
+            <a class="btn btn-secondary btn-lg" href="{{ url_for('dashboard') }}" role="button">View Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">📊 Data Collection</h5>
+                <p class="card-text">Collect real-time performance metrics including CPU, memory, disk, and network usage.</p>
+                <a href="{{ url_for('collect') }}" class="btn btn-primary">Collect Data</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">🤖 ML Training</h5>
+                <p class="card-text">Train machine learning models to predict and analyze performance patterns.</p>
+                <button class="btn btn-success" onclick="trainModel()">Train Model</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">⚡ Optimization</h5>
+                <p class="card-text">Use genetic algorithms to find optimal system parameters for peak performance.</p>
+                <button class="btn btn-warning" onclick="runOptimization()">Optimize</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="status-message" class="mt-4" style="display: none;"></div>
+
+<script>
+function trainModel() {
+    fetch('/train', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        showMessage(data.message, data.status === 'success' ? 'success' : 'danger');
+    })
+    .catch(error => {
+        showMessage('Error training model: ' + error.message, 'danger');
+    });
+}
+
+function runOptimization() {
+    fetch('/optimize', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showMessage(data.message + '<br>Best parameters: ' + JSON.stringify(data.parameters), 'success');
+        } else {
+            showMessage(data.message, 'danger');
+        }
+    })
+    .catch(error => {
+        showMessage('Error running optimization: ' + error.message, 'danger');
+    });
+}
+
+function showMessage(message, type) {
+    const statusDiv = document.getElementById('status-message');
+    statusDiv.className = `alert alert-${type}`;
+    statusDiv.innerHTML = message;
+    statusDiv.style.display = 'block';
+    setTimeout(() => {
+        statusDiv.style.display = 'none';
+    }, 5000);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - OS Performance Optimization{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Performance Dashboard</h2>
+        <hr>
+    </div>
+</div>
+
+{% if error %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-danger">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if data %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">CPU Usage</h5>
+                <h2>{{ "%.1f"|format(data.cpu_percent) }}%</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Memory Usage</h5>
+                <h2>{{ "%.1f"|format(data.memory_percent) }}%</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Disk Usage</h5>
+                <h2>{{ "%.1f"|format(data.disk_percent) }}%</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Network</h5>
+                <h4>Sent: {{ "%.1f"|format(data.net_sent_mb) }} MB</h4>
+                <h4>Recv: {{ "%.1f"|format(data.net_recv_mb) }} MB</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Performance Trends</h4>
+            </div>
+            <div class="card-body">
+                <div id="cpu-chart"></div>
+                <div id="memory-chart"></div>
+                <div id="disk-chart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <h4>No Data Available</h4>
+            <p>Please collect some performance data first.</p>
+            <a href="{{ url_for('collect') }}" class="btn btn-primary">Collect Data</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{% if graphs %}
+<script>
+    // CPU Chart
+    var cpuGraph = {{ graphs[0] | safe }};
+    Plotly.newPlot('cpu-chart', cpuGraph.data, cpuGraph.layout);
+
+    // Memory Chart
+    var memoryGraph = {{ graphs[1] | safe }};
+    Plotly.newPlot('memory-chart', memoryGraph.data, memoryGraph.layout);
+
+    // Disk Chart
+    var diskGraph = {{ graphs[2] | safe }};
+    Plotly.newPlot('disk-chart', diskGraph.data, diskGraph.layout);
+</script>
+{% endif %}
+{% endblock %}
