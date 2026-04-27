@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--train', action='store_true', help='Train ML model')
     parser.add_argument('--optimize', action='store_true', help='Run optimization')
     parser.add_argument('--web', action='store_true', help='Start web interface')
+    parser.add_argument('--plot', action='store_true', help='Generate plots')
     parser.add_argument('--duration', type=int, default=60, help='Data collection duration in seconds')
 
     args = parser.parse_args()

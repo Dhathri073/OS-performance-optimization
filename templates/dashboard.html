@@ -26,7 +26,7 @@
         <div class="card text-white bg-primary">
             <div class="card-body">
                 <h5 class="card-title">CPU Usage</h5>
-                <h2>{{ "%.1f"|format(data.cpu_percent) }}%</h2>
+                <h2>{{ data.cpu_percent|default(0)|round(1) }}%</h2>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
         <div class="card text-white bg-success">
             <div class="card-body">
                 <h5 class="card-title">Memory Usage</h5>
-                <h2>{{ "%.1f"|format(data.memory_percent) }}%</h2>
+                <h2>{{ data.memory_percent|default(0)|round(1) }}%</h2>
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@
         <div class="card text-white bg-warning">
             <div class="card-body">
                 <h5 class="card-title">Disk Usage</h5>
-                <h2>{{ "%.1f"|format(data.disk_percent) }}%</h2>
+                <h2>{{ data.disk_percent|default(0)|round(1) }}%</h2>
             </div>
         </div>
     </div>
@@ -50,8 +50,8 @@
         <div class="card text-white bg-info">
             <div class="card-body">
                 <h5 class="card-title">Network</h5>
-                <h4>Sent: {{ "%.1f"|format(data.net_sent_mb) }} MB</h4>
-                <h4>Recv: {{ "%.1f"|format(data.net_recv_mb) }} MB</h4>
+                <h4>Sent: {{ data.net_sent_mb|default(0)|round(1) }} MB</h4>
+                <h4>Recv: {{ data.net_recv_mb|default(0)|round(1) }} MB</h4>
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@
 {% endblock %}
 
 {% block scripts %}
-{% if graphs %}
+{% if graphs and graphs|length >= 3 %}
 <script>
     // CPU Chart
     var cpuGraph = {{ graphs[0] | safe }};
